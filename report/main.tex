@@ -1,7 +1,13 @@
 \documentclass{article}
+\usepackage{subfiles}
 \usepackage{array}
 \usepackage{geometry}
-\usepackage{multicol}
+\usepackage{hyperref}
+\usepackage{longtable}
+
+% Hyperref config
+\hypersetup{colorlinks=true, urlcolor=blue}
+\urlstyle{same}
 
 \geometry{lmargin=35pt, rmargin=35pt}
 
@@ -10,5 +16,6 @@
 
 \begin{document}
 \maketitle
-% TODO
+
+\subfile{sections/dataset.tex}
 \end{document}

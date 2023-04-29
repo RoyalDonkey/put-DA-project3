@@ -1,0 +1,61 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\section{Dataset}
+We chose the \textbf{breast cancer} dataset from \emph{Padeborn University
+Monotone Learning
+Datasets}\footnote{\url{https://en.cs.uni-paderborn.de/is/research/research-projects/software/monotone-learning-datasets}},
+due to its simplicity and alignment with the project specification.
+
+\subsection{Dataset exploration}
+\paragraph{Overview} The dataset comprises of \textbf{278 instances}, each having \textbf{7 features}
+and belonging to one of \textbf{2 classes}. Each feature is monotonic and
+normalized to the range $\left[ 0; 1 \right]$ (both inclusive). The decision
+classes are represented by the values $1.0$ and $2.0$.
+
+\paragraph{Feature \& class names} The data lacks column names, which makes it
+impossible to know what each feature represents and what the classes mean. This
+does not hinder experiment results, because in our case the meaning behind the
+numbers don't play an important role in running and testing different
+classifiers. However, for the sake of analysis, we will refer to features as
+\emph{F1} -- \emph{F7} and treat classes $1.0$ and $2.0$ as \emph{malignant} and
+\emph{benign}, respectively.
+
+\subsection{Dataset sample}
+
+(the first columns enumerate rows and are not part of the data)
+
+\begin{longtable}[c]{|r|n|n|n|n|n|n|n|l|}
+	\endhead
+	\hline
+	1 & 1.000000 & 0.500000 & 0.000000 & 1.000000 & 1.000000 & 1.000000 & 0.000000 & 2.000000 \\
+	2 & 0.500000 & 0.500000 & 0.000000 & 0.000000 & 0.000000 & 1.000000 & 0.000000 & 1.000000 \\
+	3 & 0.500000 & 0.833333 & 0.000000 & 0.000000 & 0.500000 & 0.000000 & 0.000000 & 2.000000 \\
+	4 & 1.000000 & 0.833333 & 0.000000 & 1.000000 & 1.000000 & 1.000000 & 1.000000 & 1.000000 \\
+	5 & 1.000000 & 1.000000 & 0.125000 & 1.000000 & 0.500000 & 0.000000 & 0.000000 & 2.000000 \\
+	\hline
+	\caption{Raw sample, as present in the CSV file}
+\end{longtable}
+
+\begin{longtable}[c]{|r|n|n|n|n|n|n|n|l|}
+	\hline
+	\emph{\#} & \emph{F1} & \emph{F2} & \emph{F3} & \emph{F4} & \emph{F5} & \emph{F6} & \emph{F7} & \emph{class} \\
+	\hline
+	\endfirsthead
+	\hline
+	\emph{\#} & \emph{F1} & \emph{F2} & \emph{F3} & \emph{F4} & \emph{F5} & \emph{F6} & \emph{F7} & \emph{class} \\
+	\hline
+	\endhead
+	1 & 1.000000 & 0.500000 & 0.000000 & 1.000000 & 1.000000 & 1.000000 & 0.000000 & benign\\
+	2 & 0.500000 & 0.500000 & 0.000000 & 0.000000 & 0.000000 & 1.000000 & 0.000000 & malignant\\
+	3 & 0.500000 & 0.833333 & 0.000000 & 0.000000 & 0.500000 & 0.000000 & 0.000000 & benign \\
+	4 & 1.000000 & 0.833333 & 0.000000 & 1.000000 & 1.000000 & 1.000000 & 1.000000 & malignant\\
+	5 & 1.000000 & 1.000000 & 0.125000 & 1.000000 & 0.500000 & 0.000000 & 0.000000 & benign \\
+	\hline
+	\caption{Processed sample}
+\end{longtable}
+
+The full dataset is available at \verb`data/breast-cancer.csv` (from the project root directory).
+
+\end{document}

@@ -56,6 +56,12 @@ def configure() -> dict[str, Any]:
         'predictor'            : 'auto',
         'num_parallel_tree'    : 1,
         'monotone_constraints' : monotone_constraints,
+        # https://xgboost.readthedocs.io/en/latest/parameter.html#learning-task-parameters
+        # I half-guessed the following 2 values, I suppose they should be compliant with
+        # the error function described in lab7 pdf on page 8:
+        'objective'            : 'binary:logistic',
+        'eval_metric'          : ['auc'],
+        'seed'                 : 0,
     }
 
 def run() -> None:

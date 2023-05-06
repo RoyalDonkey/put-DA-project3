@@ -70,6 +70,8 @@ def Train(model, train_dataloader: DataLoader, test_dataloader: DataLoader,
                     "accuracy_test": acc_test,
                     "auc_train": auc,
                     "auc_test": auc_test,
+                    "f1_train": f1,
+                    "f1_test": f1_test,
                 },
                 save_path,
             )

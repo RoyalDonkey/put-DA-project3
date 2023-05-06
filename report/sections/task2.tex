@@ -1,0 +1,46 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+\section{Experiments - Task2}
+
+\begin{table}
+    \begin{center}
+        \begin{tabular}{c||c|c|c}
+            \hline
+            Model & Accuracy & AUC & F1 \\
+            \hline
+            \hline
+            ANN-UTA & 0.7803 & 0.8669 & 0.6545
+        \end{tabular}
+        \caption{Performance of various models during testing}
+    \end{center}
+\end{table}
+
+% Perhaps this should be moved if the same technique is used in other places
+It is essential to note here that the two cost type criteria: \emph{buying} and \emph{maint}
+have been transformed in the following way:
+\verb|new_value = 1 - old_value|.
+Thanks to this procedure more preferred values are represented by larger numbers,
+just as in the case of gain type criteria.
+This is done in order to facilitate using non-decreasing marginal value functions for all criteria.
+
+% Based on the parameters obtained, can we say something about the user’s
+% preferences? Are there any criteria that have no effect, or have a decisive
+% influence? Whether there are any preference thresholds? Are there any
+% evaluations on criteria that are indifference in terms of preferences?
+No criterion seems to have a decisive influence or be irrelevant.
+
+Their maximum values of their marginal value functions ("weights")
+are all concentrated roughly between 0.14 and 0.2.
+
+All but one function are more or less flat in the larger values of $g_i$.
+The one exception - \emph{buying}. Its marginal value function is particularly interesting.
+
+It is seemingly composed out of two linear pieces, with a single breakpoint
+somewhere between 0.2 and 0.4, towards the beginning of this segment.
+This likely reflects the threshold between \emph{vhigh} and \emph{high}.
+
+Having 3 doors seems to be a very big advantage over having only 2,
+but adding more doesn't give much benefit
+
+\end{document}

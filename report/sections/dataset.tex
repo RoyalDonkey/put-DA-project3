@@ -3,59 +3,109 @@
 \begin{document}
 
 \section{Dataset}
-We chose the \textbf{breast cancer} dataset from \emph{Padeborn University
-Monotone Learning
-Datasets}\footnote{\url{https://en.cs.uni-paderborn.de/is/research/research-projects/software/monotone-learning-datasets}},
+We chose the \textbf{car evaluation} dataset from the \emph{UCI Machine
+Learning
+Repository}\footnote{\url{https://archive.ics.uci.edu/ml/datasets/Car+Evaluation}},
 due to its simplicity and alignment with the project specification.
 
-\subsection{Dataset exploration}
-\paragraph{Overview} The dataset comprises of \textbf{278 instances}, each having \textbf{7 features}
-and belonging to one of \textbf{2 classes}. Each feature is monotonic and
-normalized to the range $\left[ 0; 1 \right]$ (both inclusive). The decision
-classes are represented by the values $1.0$ and $2.0$.
+\subsection{Overview}
+The dataset comprises of \textbf{1728 instances}, each having \textbf{6
+features} and belonging to one of \textbf{4 classes}. Each feature is
+monotonic, with some being categorical, and some numerical.
 
-\paragraph{Feature \& class names} The data lacks column names, which makes it
-impossible to know what each feature represents and what the classes mean. This
-does not hinder experiment results, because in our case the meaning behind the
-numbers don't play an important role in running and testing different
-classifiers. However, for the sake of analysis, we will refer to features as
-\emph{F1} -- \emph{F7} and treat classes $1.0$ and $2.0$ as \emph{malignant} and
-\emph{benign}, respectively.
-
-\subsection{Dataset sample}
-
-(the first columns enumerate rows and are not part of the data)
-
-\begin{longtable}[c]{|r|n|n|n|n|n|n|n|l|}
-	\endhead
+\subsection{Transformation}
+In order to make the data suitable for the project, it was necessary to
+transform the features and classes to monotonic numerical values and normalize
+them. This was done in the following way:
+\begin{longtable}[c]{|c|c|c|c|}
 	\hline
-	1 & 1.000000 & 0.500000 & 0.000000 & 1.000000 & 1.000000 & 1.000000 & 0.000000 & 2.000000 \\
-	2 & 0.500000 & 0.500000 & 0.000000 & 0.000000 & 0.000000 & 1.000000 & 0.000000 & 1.000000 \\
-	3 & 0.500000 & 0.833333 & 0.000000 & 0.000000 & 0.500000 & 0.000000 & 0.000000 & 2.000000 \\
-	4 & 1.000000 & 0.833333 & 0.000000 & 1.000000 & 1.000000 & 1.000000 & 1.000000 & 1.000000 \\
-	5 & 1.000000 & 1.000000 & 0.125000 & 1.000000 & 0.500000 & 0.000000 & 0.000000 & 2.000000 \\
-	\hline
-	\caption{Raw sample, as present in the CSV file}
-\end{longtable}
-
-\begin{longtable}[c]{|r|n|n|n|n|n|n|n|l|}
-	\hline
-	\emph{\#} & \emph{F1} & \emph{F2} & \emph{F3} & \emph{F4} & \emph{F5} & \emph{F6} & \emph{F7} & \emph{class} \\
+	\multirow{2}*{\textbf{feature}} & \multirow{2}*{\textbf{type}} & \multicolumn{2}{c|}{\textbf{values}} &
+	\cline{3-4}
+	& & \textbf{before} & \textbf{after} \\
 	\hline
 	\endfirsthead
 	\hline
-	\emph{\#} & \emph{F1} & \emph{F2} & \emph{F3} & \emph{F4} & \emph{F5} & \emph{F6} & \emph{F7} & \emph{class} \\
+	\multirow{2}*{\textbf{feature}} & \multirow{2}*{\textbf{type}} & \multicolumn{2}{c|}{\textbf{values}} &
+	\cline{3-4}
+	& & \textbf{before} & \textbf{after} \\
 	\hline
 	\endhead
-	1 & 1.000000 & 0.500000 & 0.000000 & 1.000000 & 1.000000 & 1.000000 & 0.000000 & benign\\
-	2 & 0.500000 & 0.500000 & 0.000000 & 0.000000 & 0.000000 & 1.000000 & 0.000000 & malignant\\
-	3 & 0.500000 & 0.833333 & 0.000000 & 0.000000 & 0.500000 & 0.000000 & 0.000000 & benign \\
-	4 & 1.000000 & 0.833333 & 0.000000 & 1.000000 & 1.000000 & 1.000000 & 1.000000 & malignant\\
-	5 & 1.000000 & 1.000000 & 0.125000 & 1.000000 & 0.500000 & 0.000000 & 0.000000 & benign \\
+	\multirow{4}{*}{\emph{buying}, \emph{maint}} & \multirow{4}*{cost}
+		  & \verb`low` & \verb`0.000000` \\
+		& & \verb`med` & \verb`0.333333` \\
+		& & \verb`high` & \verb`0.666667` \\
+		& & \verb`vhigh` & \verb`1.000000` \\
+	\hline
+	\multirow{4}{*}{\emph{doors}} & \multirow{4}*{gain}
+		  & \verb`2` & \verb`0.000000` \\
+		& & \verb`3` & \verb`0.333333` \\
+		& & \verb`4` & \verb`0.666667` \\
+		& & \verb`5more` & \verb`1.000000` \\
+	\hline
+	\multirow{3}{*}{\emph{persons}} & \multirow{3}*{gain}
+		& \verb`2` & \verb`0.000000` \\
+		& & \verb`4` & \verb`0.500000` \\
+		& & \verb`more` & \verb`1.000000` \\
+	\hline
+	\multirow{3}{*}{\emph{lug\_boot}} & \multirow{3}*{gain}
+		& \verb`small` & \verb`0.000000` \\
+		& & \verb`med` & \verb`0.500000` \\
+		& & \verb`big` & \verb`1.000000` \\
+	\hline
+	\multirow{3}{*}{\emph{safety}} & \multirow{3}*{gain}
+		& \verb`low` & \verb`0.000000` \\
+		& & \verb`med` & \verb`0.500000` \\
+		& & \verb`high` & \verb`1.000000` \\
+	\hline
+	\hline
+	\multirow{4}{*}{\textbf{class}} & \multirow{4}*{--}
+		& \verb`unacc` & \verb`1.000000` \\
+		& & \verb`acc` & \verb`2.000000` \\
+		& & \verb`good` & \verb`3.000000` \\
+		& & \verb`vgood` & \verb`4.000000` \\
+	\hline
+\end{longtable}
+
+\noindent
+Note that for some tasks, the decision class will be binarized to represent
+whether a car is \textbf{at least acceptable}
+(\verb`unacc → 0.000000`, everything else \verb`→ 1.000000`).
+
+\subsection{Sample}
+
+(the first columns enumerate rows and are not part of the data)
+
+\begin{longtable}[c]{|r|n|n|n|n|n|n|l|}
+	\endhead
+	\hline
+	1 & vhigh & vhigh & 2 & 2 & med & med & unacc \\
+	2 & high & low & 5more & 2 & small & low & unacc \\
+	3 & med & low & 4 & 4 & med & high & vgood \\
+	4 & low & low & 4 & more & med & med & good \\
+	5 & vhigh & vhigh & 5more & more & med & med & unacc \\
+	\hline
+	\caption{Raw sample, as present in the original CSV file}
+\end{longtable}
+
+\begin{longtable}[c]{|r|n|n|n|n|n|n|l|}
+	\hline
+	\emph{\#} & \emph{buying} & \emph{maint} & \emph{doors} & \emph{persons} & \emph{lug\_boot} & \emph{safety} & \emph{class} \\
+	\hline
+	\endfirsthead
+	\hline
+	\emph{\#} & \emph{buying} & \emph{maint} & \emph{doors} & \emph{persons} & \emph{lug\_boot} & \emph{safety} & \emph{class} \\
+	\hline
+	\endhead
+	1 & 1.000000 & 1.000000 & 0.000000 & 0.000000 & 0.500000 & 0.500000 & 0.000000 \\
+	2 & 0.666667 & 0.000000 & 1.000000 & 0.000000 & 0.000000 & 0.000000 & 0.000000 \\
+	3 & 0.333333 & 0.000000 & 0.500000 & 0.500000 & 0.500000 & 1.000000 & 4.000000 \\
+	4 & 0.000000 & 0.000000 & 0.500000 & 1.000000 & 0.500000 & 0.500000 & 3.000000 \\
+	5 & 1.000000 & 1.000000 & 1.000000 & 1.000000 & 0.500000 & 0.500000 & 0.000000 \\
 	\hline
 	\caption{Processed sample}
 \end{longtable}
 
-The full dataset is available at \verb`data/breast-cancer.csv` (from the project root directory).
+The processed dataset is available at \verb`data/car-evaluation.csv` (from the
+project root directory).
 
 \end{document}

@@ -1,6 +1,5 @@
 import torch
 import torch.nn as nn
-import torch.functional as F
 import pandas as pd
 import numpy as np
 from torch.utils.data import DataLoader, Dataset
@@ -20,6 +19,7 @@ ANTIIDEAL_ALTERNATIVE = np.array([1., 1., 0., 0., 0., 0., 1.])
 IDEAL_ALTERNATIVE     = IDEAL_ALTERNATIVE[:-1]
 ANTIIDEAL_ALTERNATIVE = ANTIIDEAL_ALTERNATIVE[:-1]
 MODEL_PATH = "UTA_model.pt2"
+
 
 class MonotonicDataset(Dataset):
     def __init__(self, features: np.ndarray, labels: np.ndarray):
@@ -74,20 +74,19 @@ def run() -> None:
     features, labels = load_data(CSV, CSV_COLNAMES)
     X_train, X_test, y_train, y_test = train_test_split(
         features, labels, test_size=0.2)
-    train_loader = DataLoader(MonotonicDataset(X_train, y_train), batch_size=len(X_train))
-    test_loader  = DataLoader(MonotonicDataset(X_test, y_test), batch_size=len(X_test))
+    train_loader = DataLoader(MonotonicDataset(X_train, y_train),
+                              batch_size=len(X_train))
+    test_loader  = DataLoader(MonotonicDataset(X_test, y_test),
+                              batch_size=len(X_test))
     uta = UTA(NO_CRITERIA, 12)
     model = helper_layers.NormLayer(uta, NO_CRITERIA)
-    best_acc, test_acc, best_auc, test_auc  = helper_training.Train(model, train_loader, test_loader, MODEL_PATH)
+    best_acc, test_acc, best_auc, test_auc = helper_training.Train(
+        model, train_loader, test_loader, MODEL_PATH)
 
-    print("BEST ACC")
-    print(best_acc)
-    print("TEST ACC")
-    print(test_acc)
-    print("BEST AUC")
-    print(best_auc)
-    print("TEST AUC")
-    print(test_auc)
+    print("BEST ACC:", best_acc)
+    print("TEST ACC:", test_acc)
+    print("BEST AUC:", best_auc)
+    print("TEST AUC:", test_auc)
 
 
 if __name__ == "__main__":

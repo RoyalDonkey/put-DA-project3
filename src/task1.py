@@ -7,8 +7,8 @@ import pandas as pd
 import xgboost as xgb
 from typing import Any
 
-CSV = '../data/breast-cancer.csv'
-CSV_COLNAMES = ('F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'class')
+CSV = '../data/car-evaluation.csv'
+CSV_COLNAMES = ('buying', 'maint', 'doors', 'persons', 'lug_boot', 'safety', 'class')
 
 
 def load_data(fpath: str) -> xgb.DMatrix:
@@ -29,13 +29,12 @@ def configure() -> dict[str, Any]:
     # https://xgboost.readthedocs.io/en/latest/tutorials/monotonic.html
     # The monotone values below are arbitrary guesses
     monotone_constraints = {
-        'F1': 1,
-        'F2': -1,
-        'F3': 1,
-        'F4': -1,
-        'F5': 1,
-        'F6': -1,
-        'F7': 1,
+        'buying': -1,
+        'maint': -1,
+        'doors': 1,
+        'persons': 1,
+        'lug_boot': 1,
+        'safety': 1,
     }
 
     return {

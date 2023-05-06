@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+import numpy as np
 
 
 class LeakyHardSigmoid(nn.Module):
@@ -87,8 +88,8 @@ class ThresholdLayer(nn.Module):
         super().__init__()
         if threshold is None:
             self.threshold = nn.Parameter(
-                torch.FloatTensor(1).uniform_(0.1, 0.9), requires_grad=requires_grad
-            )
+                torch.FloatTensor(1).uniform_(0.1, 0.9),
+                requires_grad=requires_grad)
         else:
             self.treshold = nn.Parameter(
                 torch.FloatTensor([threshold]), requires_grad=requires_grad
@@ -99,23 +100,22 @@ class ThresholdLayer(nn.Module):
 
 
 class NormLayer(nn.Module):
-    def __init__(self, method, criteria_nr):
+    def __init__(self, method, criteria_nr, ideal_alternative: np.ndarray,
+                 antiideal_alternative: np.ndarray):
         super().__init__()
         self.method = method
         self.criteria_nr = criteria_nr
         self.thresholdLayer = ThresholdLayer()
+        self.ideal_alternative = torch.FloatTensor(ideal_alternative) \
+            .view(1, 1, self.criteria_nr)
+        self.antiideal_alternative = torch.FloatTensor(antiideal_alternative) \
+            .view(1, 1, self.criteria_nr)
 
     def forward(self, x, *args):
         self.out = self.method(x)
-
-        zero_input = (
-            torch.FloatTensor(self.criteria_nr)
-            .zero_()
-            .view(1, 1, -1)
-            .to(self.out.device)
-        )
-        self.zero = self.method(zero_input)
-        self.one = self.method(zero_input + 1)
-
-        self.out = (self.out - self.zero) / (self.one - self.zero)
+        self.best = self.ideal_alternative.to(self.out.device)
+        self.worst = self.antiideal_alternative.to(self.out.device)
+        self.best = self.method(self.best)
+        self.worst = self.method(self.worst)
+        self.out = (self.out - self.worst) / (self.best - self.worst)
         return self.thresholdLayer(self.out)

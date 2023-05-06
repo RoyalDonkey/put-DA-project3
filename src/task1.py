@@ -50,6 +50,7 @@ def configure() -> dict[str, Any]:
     # https://xgboost.readthedocs.io/en/latest/parameter.html
 
     # Global configuration
+    print('-> Configuring XGBoost global parameters')
     xgb.set_config(verbosity=2, use_rmm=True)
 
     # https://xgboost.readthedocs.io/en/latest/tutorials/monotonic.html

@@ -1,29 +1,57 @@
+#!/usr/bin/env python3
 """
 Task 1: XDGBoost
 https://xgboost.readthedocs.io/en/latest/python/python_intro.html
 """
-import numpy as np
 import pandas as pd
 import xgboost as xgb
+from sklearn.model_selection import train_test_split
 from typing import Any
 
 CSV = '../data/car-evaluation.csv'
 CSV_COLNAMES = ('buying', 'maint', 'doors', 'persons', 'lug_boot', 'safety', 'class')
+NUM_BOOST_ROUND = 10  # Number of tree boosting rounds
+EVAL_RATIO = 0.1      # The percentage of all data that will be used for evaluation
 
 
-def load_data(fpath: str) -> xgb.DMatrix:
+def load_data(fpath: str) -> tuple[xgb.DMatrix, xgb.DMatrix]:
     print(f'-> Loading data from {fpath}')
     df = pd.read_csv(CSV, header=None, names=CSV_COLNAMES)
+    # Binarize classes
+    df[CSV_COLNAMES[-1]] = df[CSV_COLNAMES[-1]].map(lambda x: 1 if x >= 2. else 0)
     print(df.head())
-    data = df.to_numpy(dtype=np.float32)
-    features = data[:, :-1]
-    labels = data[:, -1]
-    return xgb.DMatrix(features, label=labels)
+    features = df[[*CSV_COLNAMES[:-1]]]
+    labels = df[[CSV_COLNAMES[-1]]]
+
+    print('-> Splitting data into training and evaluation sets')
+    train_data, eval_data, train_labels, eval_labels = train_test_split(
+        features, labels,
+        test_size=EVAL_RATIO,
+        random_state=1234,  # arbitrary seed for reproducibility
+        stratify=labels
+    )
+
+    # Print some statistics for sanity
+    train_0s = train_labels[train_labels[CSV_COLNAMES[-1]] == 0]
+    train_1s = train_labels[train_labels[CSV_COLNAMES[-1]] == 1]
+    print(f'training set:    {len(train_data)} total, {len(train_1s)} 1\'s, {len(train_0s)} 0\'s')
+    eval_0s = eval_labels[eval_labels[CSV_COLNAMES[-1]] == 0]
+    eval_1s = eval_labels[eval_labels[CSV_COLNAMES[-1]] == 1]
+    print(f'evaluation set:  {len(eval_data)} total, {len(eval_1s)} 1\'s, {len(eval_0s)} 0\'s')
+    assert len(train_1s) != 0
+    assert len(train_0s) != 0
+    assert len(eval_1s) != 0
+    assert len(eval_0s) != 0
+
+    dtrain = xgb.DMatrix(train_data, label=train_labels)
+    deval  = xgb.DMatrix(eval_data, label=eval_labels)
+    return dtrain, deval
 
 def configure() -> dict[str, Any]:
     # https://xgboost.readthedocs.io/en/latest/parameter.html
 
     # Global configuration
+    print('-> Configuring XGBoost global parameters')
     xgb.set_config(verbosity=2, use_rmm=True)
 
     # https://xgboost.readthedocs.io/en/latest/tutorials/monotonic.html
@@ -67,6 +95,13 @@ def run() -> None:
     print()
     print('Task 1: XDGBoost')
 
-    dm = load_data(CSV)
-
+    dtrain, deval = load_data(CSV)
     params = configure()
+
+    evallist = [(dtrain, 'train'), (deval, 'deval')]
+    bst = xgb.train(params, dtrain, NUM_BOOST_ROUND, evals=evallist)
+    bst.dump_model('rawdump.txt')
+
+
+if __name__ == '__main__':
+    run()

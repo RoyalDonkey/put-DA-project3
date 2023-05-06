@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Task 1: XDGBoost
 https://xgboost.readthedocs.io/en/latest/python/python_intro.html
@@ -100,3 +101,7 @@ def run() -> None:
     evallist = [(dtrain, 'train'), (deval, 'deval')]
     bst = xgb.train(params, dtrain, NUM_BOOST_ROUND, evals=evallist)
     bst.dump_model('rawdump.txt')
+
+
+if __name__ == '__main__':
+    run()

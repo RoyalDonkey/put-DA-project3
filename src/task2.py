@@ -59,7 +59,8 @@ def load_data(fpath: str, colnames: str) -> Tuple[np.ndarray, np.ndarray]:
     data = df.to_numpy(dtype=np.float32)
     features = data[:, :-1]
     labels = data[:, -1].astype(int)
-    labels = np.where(labels > 2, 1, 0)
+    # Adjust when changing data to ensure the binarisation makes sense!
+    labels = np.where(labels > 1, 1, 0)
     features = features.reshape(-1, 1, NO_CRITERIA)
     return features, labels
 
@@ -80,13 +81,15 @@ def run() -> None:
                               batch_size=len(X_test))
     uta = UTA(NO_CRITERIA, 12)
     model = helper_layers.NormLayer(uta, NO_CRITERIA)
-    best_acc, test_acc, best_auc, test_auc = helper_training.Train(
-        model, train_loader, test_loader, MODEL_PATH)
+    best_acc, test_acc, best_auc, test_auc, best_f1, test_f1 = \
+        helper_training.Train(model, train_loader, test_loader, MODEL_PATH)
 
     print("BEST ACC:", best_acc)
     print("TEST ACC:", test_acc)
     print("BEST AUC:", best_auc)
     print("TEST AUC:", test_auc)
+    print("BEST F1:", best_f1)
+    print("TEST F1:", test_f1)
 
 
 if __name__ == "__main__":

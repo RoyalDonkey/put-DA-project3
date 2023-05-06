@@ -7,14 +7,15 @@ from sklearn.model_selection import train_test_split
 from typing import Tuple
 import helper_layers
 import helper_training
+import helper_explainability
 
 
 CSV = "../data/car-evaluation.csv"
-# CSV_COLNAMES = ('F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'class')
 CSV_COLNAMES = ("buying", "maint", "doors", "persons", "lug_boot", "safety", "class")
+CRITERIA_NAMES = CSV_COLNAMES[:-1]
 NO_CRITERIA = len(CSV_COLNAMES) - 1
-IDEAL_ALTERNATIVE     = np.array([0., 0., 1., 1., 1., 1., 4.])
-ANTIIDEAL_ALTERNATIVE = np.array([1., 1., 0., 0., 0., 0., 1.])
+IDEAL_ALTERNATIVE     = np.array([1., 1., 1., 1., 1., 1., 4.])
+ANTIIDEAL_ALTERNATIVE = np.array([0., 0., 0., 0., 0., 0., 1.])
 # drop "label" - included in definition for posterity
 IDEAL_ALTERNATIVE     = IDEAL_ALTERNATIVE[:-1]
 ANTIIDEAL_ALTERNATIVE = ANTIIDEAL_ALTERNATIVE[:-1]
@@ -58,7 +59,15 @@ def load_data(fpath: str, colnames: str) -> Tuple[np.ndarray, np.ndarray]:
     print(df.head())
     data = df.to_numpy(dtype=np.float32)
     features = data[:, :-1]
+    # Transforming the two cost-type criteria
+    # Their values will now be 1 for the best performance, and 0 for the worst
+    # This is done as a workaround!
+    # Now nondecreasing marginal value functions can be used as intended
+    features[:, 0] = 1 - features[:, 0]
+    features[:, 1] = 1 - features[:, 1]
+
     labels = data[:, -1].astype(int)
+    # Binarising the labels
     # Adjust when changing data to ensure the binarisation makes sense!
     labels = np.where(labels > 1, 1, 0)
     features = features.reshape(-1, 1, NO_CRITERIA)
@@ -67,11 +76,7 @@ def load_data(fpath: str, colnames: str) -> Tuple[np.ndarray, np.ndarray]:
 
 def run() -> None:
     print()
-    print('Task 2: Ch-Constr/UTADIS')
-    # TODO
-    # figure out the hook thing
-    # likely split this into separate model building and visualisation scripts
-
+    print("Task 2: ANN-UTADIS")
     features, labels = load_data(CSV, CSV_COLNAMES)
     X_train, X_test, y_train, y_test = train_test_split(
         features, labels, test_size=0.2)
@@ -80,16 +85,19 @@ def run() -> None:
     test_loader  = DataLoader(MonotonicDataset(X_test, y_test),
                               batch_size=len(X_test))
     uta = UTA(NO_CRITERIA, 12)
-    model = helper_layers.NormLayer(uta, NO_CRITERIA)
+    model = helper_layers.NormLayer(uta, NO_CRITERIA,
+                                    IDEAL_ALTERNATIVE, ANTIIDEAL_ALTERNATIVE)
     best_acc, test_acc, best_auc, test_auc, best_f1, test_f1 = \
         helper_training.Train(model, train_loader, test_loader, MODEL_PATH)
 
-    print("BEST ACC:", best_acc)
-    print("TEST ACC:", test_acc)
-    print("BEST AUC:", best_auc)
-    print("TEST AUC:", test_auc)
-    print("BEST F1:", best_f1)
-    print("TEST F1:", test_f1)
+    print("BEST ACC:", round(best_acc, 4))
+    print("TEST ACC:", round(test_acc, 4))
+    print("BEST AUC:", round(best_auc, 4))
+    print("TEST AUC:", round(test_auc, 4))
+    print("BEST F1:", round(best_f1, 4))
+    print("TEST F1:", round(test_f1, 4))
+    print("Showing plots of network's marginal value functions...")
+    helper_explainability.plot_marginal_functions(model, CRITERIA_NAMES, NO_CRITERIA)
 
 
 if __name__ == "__main__":

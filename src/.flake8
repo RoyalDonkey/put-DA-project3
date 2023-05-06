@@ -6,4 +6,5 @@
 # E741 -- ambiguous variable names
 # E203 -- whitespace before ':'
 # E241 -- multiple spaces after ':'
-ignore = E302,E305,E401,E501,E741,E203,E241
+# E221 -- multiple spaces before operator
+ignore = E302,E305,E401,E501,E741,E203,E241,E221

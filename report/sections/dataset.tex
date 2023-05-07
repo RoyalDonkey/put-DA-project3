@@ -108,4 +108,11 @@ whether a car is \textbf{at least acceptable}
 The processed dataset is available at \verb`data/car-evaluation.csv` (from the
 project root directory).
 
+\subsection{Splitting into train and test sets}
+In order to be able to compare all models fairly, it is essential to guarantee
+that their respective training and testing sets are identical. This is achieved
+with SciKit-Learn's \verb`train_test_split()` function, by fixing its random
+seed. \verb`train_test_split()` also takes care of the stratification of the
+resulting sets.
+
 \end{document}

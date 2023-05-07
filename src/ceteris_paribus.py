@@ -2,8 +2,10 @@ import dalex
 import torch
 import pandas as pd
 import numpy as np
+import xgboost as xgb
 from typing import Tuple, Callable
 from task2 import UTA
+from task3 import nonlinearNN
 
 CSV = "../data/car-evaluation.csv"
 CSV_COLNAMES = ("buying", "maint", "doors", "persons", "lug_boot", "safety", "class")
@@ -43,14 +45,29 @@ def pred(model, data: pd.DataFrame, model_forward: Callable = None) -> np.ndarra
         answers.append(out.detach().numpy().flatten()[0])
     return np.array(answers)
 
+def dalex_explain(model: torch.nn.Module | xgb.Booster, features: pd.DataFrame, labels: pd.DataFrame, explain_indices: list[int], **kwargs) -> None:
+    explain_alternatives = features.iloc[explain_indices]
+    explainer = dalex.Explainer(model, features, labels, **kwargs)
+    for _, alternative in explain_alternatives.iterrows():
+        rf_profile = explainer.predict_profile(new_observation=alternative)
+        rf_profile.plot()
 
 if __name__ == "__main__":
     features, labels = load_data(CSV, CSV_COLNAMES, True)
     print(features)
+
+    model: torch.nn.Module | xgb.Booster
     explain_indices = [0, 1635, 1727]
-    explain_alternatives = features.iloc[explain_indices]
-    model = torch.load("ENTIRE_UTA.pt2")
-    explainer = dalex.Explainer(model, features, labels, predict_function=pred)
-    for _, alternative in explain_alternatives.iterrows():
-        rf_profile = explainer.predict_profile(new_observation = alternative)
-        rf_profile.plot()
+
+    # XGBoost
+    model = xgb.Booster()
+    model.load_model("xgboost.model")
+    dalex_explain(model, features, labels, explain_indices)
+
+    # UTA-ANN
+    model = torch.load("IMPORTANTEST_ENTIRE_UTA.pt2")
+    dalex_explain(model, features, labels, explain_indices, predict_function=pred)
+
+    # nonlinear-ANN
+    model = torch.load("ANN_model.pt2")
+    dalex_explain(model, features, labels, explain_indices, predict_function=pred)

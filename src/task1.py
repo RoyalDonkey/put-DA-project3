@@ -5,7 +5,10 @@ https://xgboost.readthedocs.io/en/latest/python/python_intro.html
 """
 import pandas as pd
 import xgboost as xgb
+import matplotlib.pyplot as plt
+from numpy import round
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import f1_score
 from typing import Any
 
 CSV = '../data/car-evaluation.csv'
@@ -87,9 +90,29 @@ def configure() -> dict[str, Any]:
         # I half-guessed the following 2 values, I suppose they should be compliant with
         # the error function described in lab7 pdf on page 8:
         'objective'            : 'binary:logistic',
-        'eval_metric'          : ['auc'],
+        'eval_metric'          : ['auc', 'error'],
         'seed'                 : 0,
     }
+
+def evaluate(bst: xgb.Booster, evals_result: dict[Any, Any], deval: xgb.DMatrix) -> None:
+    print('-> Evaluating the trained model')
+    print('eval set Accuracy:', 1. - evals_result['deval']['error'][-1])
+    print('eval set AUC:     ', evals_result['deval']['auc'][-1])
+
+    # Unfortunately, xgb doesn't seem to provide a built-in way to calculate
+    # the F1 score, so we need to run the model once more to do it manually:
+    pred = bst.predict(deval)
+    print('eval set F1:      ', f1_score(deval.get_label(), round(pred)))
+
+def plot(bst: xgb.Booster) -> None:
+    print('-> Generating plots')
+    fig, ax = plt.subplots(figsize=(15, 15))
+    xgb.plot_tree(bst, ax=ax, num_trees=0)
+    plt.show()
+
+    fig, ax = plt.subplots(figsize=(15, 15))
+    xgb.plot_importance(bst, ax=ax)
+    plt.show()
 
 def run() -> None:
     print()
@@ -98,10 +121,12 @@ def run() -> None:
     dtrain, deval = load_data(CSV)
     params = configure()
 
-    evallist = [(dtrain, 'train'), (deval, 'deval')]
-    bst = xgb.train(params, dtrain, NUM_BOOST_ROUND, evals=evallist)
-    bst.dump_model('rawdump.txt')
+    evallist = [(deval, 'deval')]
+    evals_result: dict[Any, Any] = {}
+    bst = xgb.train(params, dtrain, NUM_BOOST_ROUND, evals=evallist, evals_result=evals_result)
 
+    evaluate(bst, evals_result, deval)
+    plot(bst)
 
 if __name__ == '__main__':
     run()

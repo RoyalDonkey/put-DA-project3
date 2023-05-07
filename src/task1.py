@@ -124,6 +124,7 @@ def run() -> None:
     evallist = [(deval, 'deval')]
     evals_result: dict[Any, Any] = {}
     bst = xgb.train(params, dtrain, NUM_BOOST_ROUND, evals=evallist, evals_result=evals_result)
+    bst.save_model('xgboost.model')
 
     evaluate(bst, evals_result, deval)
     plot(bst)

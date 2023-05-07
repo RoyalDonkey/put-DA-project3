@@ -3,22 +3,17 @@ import torch
 import pandas as pd
 import numpy as np
 import xgboost as xgb
-from typing import Tuple, Callable
-from task2 import UTA
-from task3 import nonlinearNN
+from typing import Callable, Optional
+from task2 import UTA          # noqa: F401
+from task3 import nonlinearNN  # noqa: F401
 
 CSV = "../data/car-evaluation.csv"
 CSV_COLNAMES = ("buying", "maint", "doors", "persons", "lug_boot", "safety", "class")
 CRITERIA_NAMES = CSV_COLNAMES[:-1]
 NO_CRITERIA = len(CSV_COLNAMES) - 1
-IDEAL_ALTERNATIVE     = np.array([1., 1., 1., 1., 1., 1., 4.])
-ANTIIDEAL_ALTERNATIVE = np.array([0., 0., 0., 0., 0., 0., 1.])
-# drop "label" - included in definition for posterity
-IDEAL_ALTERNATIVE     = IDEAL_ALTERNATIVE[:-1]
-ANTIIDEAL_ALTERNATIVE = ANTIIDEAL_ALTERNATIVE[:-1]
 
 
-def load_data(fpath: str, colnames: str, transform_cost: bool = False) -> Tuple[np.ndarray, np.ndarray]:
+def load_data(fpath: str, colnames: list[str], transform_cost: bool = False) -> tuple[np.ndarray, np.ndarray]:
     df = pd.read_csv(fpath, header=None, names=colnames)
     # Binarize classes
     df[CSV_COLNAMES[-1]] = df[CSV_COLNAMES[-1]].map(lambda x: 1 if x >= 2. else 0)
@@ -35,7 +30,7 @@ def load_data(fpath: str, colnames: str, transform_cost: bool = False) -> Tuple[
     return features, labels
 
 
-def pred(model, data: pd.DataFrame, model_forward: Callable = None) -> np.ndarray:
+def pred(model, data: pd.DataFrame, model_forward: Optional[Callable] = None) -> np.ndarray:
     answers = []
     if model_forward is None:
         model_forward = model.forward
@@ -53,7 +48,7 @@ def dalex_explain(model: torch.nn.Module | xgb.Booster, features: pd.DataFrame, 
         rf_profile.plot()
 
 if __name__ == "__main__":
-    features, labels = load_data(CSV, CSV_COLNAMES, True)
+    features, labels = load_data(CSV, list(CSV_COLNAMES), True)
     print(features)
 
     model: torch.nn.Module | xgb.Booster

@@ -48,8 +48,7 @@ def dalex_explain(model: torch.nn.Module | xgb.Booster, features: pd.DataFrame, 
         rf_profile.plot()
 
 if __name__ == "__main__":
-    features, labels = load_data(CSV, list(CSV_COLNAMES), True)
-    print(features)
+    features, labels = load_data(CSV, list(CSV_COLNAMES))
 
     model: torch.nn.Module | xgb.Booster
     explain_indices = [0, 1635, 1727]
@@ -58,6 +57,8 @@ if __name__ == "__main__":
     model = xgb.Booster()
     model.load_model("xgboost.model")
     dalex_explain(model, features, labels, explain_indices)
+
+    features, labels = load_data(CSV, list(CSV_COLNAMES), True)
 
     # UTA-ANN
     model = torch.load("IMPORTANTEST_ENTIRE_UTA.pt2")

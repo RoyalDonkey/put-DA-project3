@@ -23,7 +23,7 @@ def AUC(x: torch.Tensor, target: torch.Tensor) -> float:
 
 def F1(x: torch.Tensor, target: torch.Tensor) -> float:
     # Without binarisation, the function doesn't pass
-    # I'm not sure if that's the wat to do this though
+    # I'm not sure if that's the way to do this though
     binary_x = np.where(x.detach().numpy()[:, 0] > 0, 1, 0)
     return f1_score(target.detach().numpy(), binary_x)
 

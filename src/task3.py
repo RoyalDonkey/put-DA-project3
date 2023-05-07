@@ -20,6 +20,7 @@ ANTIIDEAL_ALTERNATIVE = np.array([0., 0., 0., 0., 0., 0., 1.])
 IDEAL_ALTERNATIVE     = IDEAL_ALTERNATIVE[:-1]
 ANTIIDEAL_ALTERNATIVE = ANTIIDEAL_ALTERNATIVE[:-1]
 MODEL_PATH = "NN_model.pt2"
+EVAL_RATIO = 0.1      # The percentage of all data that will be used for evaluation
 
 
 class MonotonicDataset(Dataset):
@@ -82,6 +83,7 @@ def train(model: nonlinearNN, train_dataloader: DataLoader, test_dataloader: Dat
     best_auc = 0.0
     best_f1 = 0.0
     train_loss = []
+    test_loss = []
     for epoch in tqdm(range(epoch_nr)):
         for data in train_dataloader:
             inputs, labels = data
@@ -105,6 +107,7 @@ def train(model: nonlinearNN, train_dataloader: DataLoader, test_dataloader: Dat
                     inputs, labels = data
                     outputs = model(inputs)
                     loss_test = loss_fn(outputs, labels)
+                    test_loss.append(loss_test.detach().mean())
                     binary_outputs = np.where(outputs.detach().numpy() > 0.5, 1, 0)
                     binary_labels = labels.detach().numpy().astype(int)
                     acc_test = accuracy_score(binary_labels, binary_outputs)
@@ -126,7 +129,12 @@ def train(model: nonlinearNN, train_dataloader: DataLoader, test_dataloader: Dat
                 },
                 save_path,
             )
-    plt.plot(train_loss)
+    torch.save(model, f"ENTIRE_{save_path}")
+    plt.plot(train_loss, color="blue", label="training")
+    plt.legend()
+    plt.show()
+    plt.plot(test_loss, color="orange", label="test")
+    plt.legend()
     plt.show()
     return best_acc, acc_test, best_auc, auc_test, best_f1, f1_test
 
@@ -136,7 +144,10 @@ def run() -> None:
     print('Task 3: Neural network w/ nonlinear activation functions')
     features, labels = load_data(CSV, CSV_COLNAMES)
     X_train, X_test, y_train, y_test = train_test_split(
-        features, labels, test_size=0.2)
+        features, labels,
+        test_size=EVAL_RATIO,
+        random_state=1234,  # arbitrary seed for reproducibility
+        stratify=labels)
     train_loader = DataLoader(MonotonicDataset(X_train, y_train),
                               batch_size=len(X_train))
     test_loader  = DataLoader(MonotonicDataset(X_test, y_test),

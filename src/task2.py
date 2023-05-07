@@ -20,6 +20,7 @@ ANTIIDEAL_ALTERNATIVE = np.array([0., 0., 0., 0., 0., 0., 1.])
 IDEAL_ALTERNATIVE     = IDEAL_ALTERNATIVE[:-1]
 ANTIIDEAL_ALTERNATIVE = ANTIIDEAL_ALTERNATIVE[:-1]
 MODEL_PATH = "UTA_model.pt2"
+EVAL_RATIO = 0.1      # The percentage of all data that will be used for evaluation
 
 
 class MonotonicDataset(Dataset):
@@ -79,7 +80,11 @@ def run() -> None:
     print("Task 2: ANN-UTADIS")
     features, labels = load_data(CSV, CSV_COLNAMES)
     X_train, X_test, y_train, y_test = train_test_split(
-        features, labels, test_size=0.2)
+        features, labels,
+        test_size=EVAL_RATIO,
+        random_state=1234,  # arbitrary seed for reproducibility
+        stratify=labels
+    )
     train_loader = DataLoader(MonotonicDataset(X_train, y_train),
                               batch_size=len(X_train))
     test_loader  = DataLoader(MonotonicDataset(X_test, y_test),
@@ -89,7 +94,7 @@ def run() -> None:
                                     IDEAL_ALTERNATIVE, ANTIIDEAL_ALTERNATIVE)
     best_acc, test_acc, best_auc, test_auc, best_f1, test_f1 = \
         helper_training.Train(model, train_loader, test_loader, MODEL_PATH)
-
+    torch.save(model, "newer_ENTIRE_UTA.pt2")
     print("BEST ACC:", round(best_acc, 4))
     print("TEST ACC:", round(test_acc, 4))
     print("BEST AUC:", round(best_auc, 4))

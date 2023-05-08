@@ -115,4 +115,26 @@ with SciKit-Learn's \verb`train_test_split()` function, by fixing its random
 seed. \verb`train_test_split()` also takes care of the stratification of the
 resulting sets.
 
+\subsection{The "3-alternative analyses"}
+For all models' "3-alternative analyses" we used the same 3 alternatives
+(again, to retain fairness of comparison):
+
+\begin{longtable}[c]{|r|n|n|n|n|n|n|l|}
+	\hline
+	\emph{\#} & \emph{buying} & \emph{maint} & \emph{doors} & \emph{persons} & \emph{lug\_boot} & \emph{safety} & \emph{class} \\
+	\hline
+	\endfirsthead
+	\hline
+	\emph{\#} & \emph{buying} & \emph{maint} & \emph{doors} & \emph{persons} & \emph{lug\_boot} & \emph{safety} & \emph{class} \\
+	\hline
+	\endhead
+	1    & 1.000000 & 1.000000 & 0.000000 & 0.000000 & 0.000000 & 0.000000 & 1.000000 \\
+	1636 & 0.000000 & 0.000000 & 0.000000 & 0.500000 & 1.000000 & 0.000000 & 1.000000 \\
+	1728 & 0.000000 & 0.000000 & 1.000000 & 1.000000 & 1.000000 & 1.000000 & 4.000000 \\
+	\hline
+	\caption{Alternatives chosen for all 3-alternative analyses}
+\end{longtable}
+As you can see, the first alternative represents the worst case, the third the
+best case, and the second one lies somewhere in the middle.
+
 \end{document}

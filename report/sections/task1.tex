@@ -17,12 +17,11 @@ results, as visible in table \ref{table:perf}.
 \subsection{Preference analysis}
 % TODO: present DALEX output, comment on it
 
-\paragraph{XGBoost}
-The XGBoost library also has native support for quantifying and plotting
-feature importance. It must use a slightly different method than DALEX, because
-the assigned values and even the ranking of the features are not the same. For
-the sake of inter-model comparability, we decided to focus on the DALEX output,
-so this next figure is provided only as a curiosity:
+\paragraph{XGBoost} The XGBoost library also has native support for quantifying
+and plotting feature importance. It must use a slightly different method than
+DALEX, because the assigned values and even the ranking of the features are not
+the same. For the sake of inter-model comparability, we decided to focus on the
+DALEX output, so this next figure is provided only as a curiosity:
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{../img/xgb-feature-importance-xgboost.png}
@@ -30,7 +29,28 @@ so this next figure is provided only as a curiosity:
 	\label{fig:xgb-feats-xgboost}
 \end{figure}
 
-\subsection{Remarks}
+\subsection{3-alternative analysis}
+\subsubsection{Partial dependence plots}
 % TODO
 
+\subsubsection{Variable contribution plots}
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}{\linewidth}
+		\includegraphics[width=\linewidth]{../img/xgb-breakdown-worst.png}
+		\caption{Variable contribution of alternative 1 (worst) in XGBoost}
+		\label{fig:xgb-3alt1-contrib}
+	\end{subfigure}
+	\begin{subfigure}{\linewidth}
+		\includegraphics[width=\linewidth]{../img/xgb-breakdown-mid.png}
+		\caption{Variable contribution of alternative 2 (mid) in XGBoost}
+		\label{fig:xgb-3alt2-contrib}
+	\end{subfigure}
+	\begin{subfigure}{\linewidth}
+		\includegraphics[width=\linewidth]{../img/xgb-breakdown-best.png}
+		\caption{Variable contribution of alternative 3 (best) in XGBoost}
+		\label{fig:xgb-3alt3-contrib}
+	\end{subfigure}
+\end{figure}
+% TODO interpret
 \end{document}

@@ -66,18 +66,17 @@ was performed.
 Files with all plots are available in \verb|report/img/extras|. In order not to overcrowd the report,
 only the plots for \emph{safety} for the 3 alternatives are presented.
 
-\begin{figure}
+\begin{figure}[H]
     \centering
-    \begin{subfigure}[b]{0.48\linewidth}
+    \begin{subfigure}[b]{0.4\linewidth}
         \makeatletter\def\@currentlabel{DALEX plot}\makeatother
         \includegraphics[width=\linewidth]{../img/ANN_safety_worst.png}
         \label{fig:ANN-ceteris-paribus-safety}
     \end{subfigure}
-    \begin{subfigure}[b]{0.48\linewidth}
+    \begin{subfigure}[b]{0.4\linewidth}
         \includegraphics[width=\linewidth]{../img/ANN_safety_mid.png}
     \end{subfigure}
-
-    \begin{subfigure}[b]{0.48\linewidth}
+    \begin{subfigure}[b]{0.4\linewidth}
         \includegraphics[width=\linewidth]{../img/ANN_safety_best.png}
     \end{subfigure}
 
@@ -91,17 +90,18 @@ These plots suggest, that to make \emph{mid} acceptable, setting safety to aroun
 \subsubsection{Variable contribution plots}
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{\linewidth}
+    \begin{subfigure}{0.8\linewidth}
         \includegraphics[width=\linewidth]{../img/ANN-breakdown-worst.png}
         \caption{Variable contribution of alternative 1 (worst) in ANN}
         \label{fig:ANN-3alt1-contrib}
     \end{subfigure}
-    \begin{subfigure}{\linewidth}
+    \begin{subfigure}{0.8\linewidth}
         \includegraphics[width=\linewidth]{../img/ANN-breakdown-mid.png}
         \caption{Variable contribution of alternative 2 (mid) in ANN}
         \label{fig:ANN-3alt2-contrib}
     \end{subfigure}
-    \begin{subfigure}{\linewidth}
+    \centering
+    \begin{subfigure}{0.8\linewidth}
         \includegraphics[width=\linewidth]{../img/ANN-breakdown-best.png}
         \caption{Variable contribution of alternative 3 (best) in ANN}
         \label{fig:ANN-3alt3-contrib}

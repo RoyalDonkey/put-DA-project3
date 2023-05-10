@@ -8,14 +8,12 @@ Small changes were introduced to suit the authors' preferences better, but the o
 architecture is based entirely on these snippets.
 The model analysed in this section contains 12 hidden layers.
 
-% Perhaps this should be moved if the same technique is used in other places
 It is essential to note here that the two cost type criteria: \emph{buying} and \emph{maint}
 have been transformed in the following way:
 \verb|new_value = 1 - old_value|.
 Thanks to this procedure more preferred values are represented by larger numbers,
 just as in the case of gain type criteria.
 This is done in order to facilitate using non-decreasing marginal value functions for all criteria.
-
 \subsection{Model visualization}
 \begin{figure}[H]
     \centering
@@ -34,7 +32,9 @@ This is done in order to facilitate using non-decreasing marginal value function
     \begin{subfigure}[b]{0.48\linewidth}
         \includegraphics[width=\linewidth]{../img/marginal3.png}
     \end{subfigure}
+    \end{figure}
 
+    \begin{figure}\ContinuedFloat
     \begin{subfigure}[b]{0.48\linewidth}
         \includegraphics[width=\linewidth]{../img/marginal4.png}
     \end{subfigure}
@@ -108,18 +108,20 @@ only the plots for \emph{doors} for the 3 alternatives are presented
 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}[b]{\linewidth}
+    \begin{subfigure}[b]{0.4\linewidth}
         \makeatletter\def\@currentlabel{DALEX plot}\makeatother
         \includegraphics[width=\linewidth]{../img/doors_worst.png}
         \label{fig:UTA-ceteris-paribus-doors}
     \end{subfigure}
-    \begin{subfigure}[b]{\linewidth}
+    \begin{subfigure}[b]{0.4\linewidth}
         \includegraphics[width=\linewidth]{../img/doors_medium.png}
     \end{subfigure}
-    \begin{subfigure}[b]{\linewidth}
+
+    \begin{subfigure}[b]{0.4\linewidth}
         \includegraphics[width=\linewidth]{../img/doors_best.png}
     \end{subfigure}
-    \caption{Ceteris paribus analysis for criterion \emph{doors} for (in order, top to bottom): \emph{worst}, \emph{mid}, \emph{best}}
+    \caption{Ceteris paribus analysis for criterion \emph{doors} for (from left to right and
+    top to bottom)}
 \end{figure}
 
 In image form, the plots can't be examined as thoroughly as in interactive DALEX output, but it agreed
@@ -131,17 +133,19 @@ obtain a positive result.
 \subsubsection{Variable contribution plots}
 \begin{figure}[H]
     \centering
-    \begin{subfigure}{\linewidth}
+    \begin{subfigure}{0.78\linewidth}
         \includegraphics[width=\linewidth]{../img/UTA-breakdown-worst.png}
         \caption{Variable contribution of alternative 1 (worst) in ANN-UTADIS}
         \label{fig:UTA-3alt1-contrib}
     \end{subfigure}
-    \begin{subfigure}{\linewidth}
+    \begin{subfigure}{0.78\linewidth}
         \includegraphics[width=\linewidth]{../img/UTA-breakdown-mid.png}
         \caption{Variable contribution of alternative 2 (mid) in ANN-UTADIS}
         \label{fig:UTA-3alt2-contrib}
-    \end{subfigure}
-    \begin{subfigure}{\linewidth}
+    \end{subfigure}\end{figure}
+    \begin{figure}[H]\ContinuedFloat
+    \centering
+    \begin{subfigure}{0.78\linewidth}
         \includegraphics[width=\linewidth]{../img/UTA-breakdown-best.png}
         \caption{Variable contribution of alternative 3 (best) in ANN-UTADIS}
         \label{fig:UTA-3alt3-contrib}

@@ -41,7 +41,7 @@ if __name__ == "__main__":
     #   2:  UTA-ANN
     #   3:  nonlinear-ANN
     #   Task: evaluate alternatives from file, loaded based on their index
-    MODEL_TYPE = 3
+    MODEL_TYPE = 0
     EXPLAIN_INDICES = [0, 1635, 1727]
     #############  ! CONFIGURATION ABOVE !  #############
 
@@ -61,8 +61,8 @@ if __name__ == "__main__":
     if MODEL_TYPE == 1:
         for idx in EXPLAIN_INDICES:
             np_row = np.array(features.iloc[idx])
-            print(f"xgboost output for {np_row}, {labels.iloc[idx]['class']}: \
-                   {model.predict(features[idx])}")
+            pred = model.predict(xgb.DMatrix(np.array([np_row])))
+            print(f"xgboost output for {np_row}, {labels.iloc[idx]['class']}: {pred[0]}")
     elif MODEL_TYPE == 2:
         for idx in EXPLAIN_INDICES:
             np_row = np.array(features.iloc[idx])

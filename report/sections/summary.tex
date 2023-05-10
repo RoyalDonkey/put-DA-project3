@@ -21,4 +21,35 @@ results.
 		\label{table:perf}
 	\end{center}
 \end{table}
+
+Over the course of this report three basic types of visualizations provided by the
+DALEX library will be used. Here is a brief explanation:
+\begin{itemize}
+
+\item Feature importance
+
+DALEX employs permutation-based variable-importance. The explainer shuffles
+the values of selected attribute and computes the difference between the performance
+of the model trained on this altered data and the original: $L_{\mathrm{perm}} - L_{\mathrm{org}}$. The greater the
+difference, the more important the feature is.
+AUC loss function is used in this context.
+
+\item Ceteris paribus
+
+They demonstrate how changing the value of one feature while leaving others
+unchanged would affect the output of a model.
+The value of the feature is presented on the x-axis, and the model prediction
+with this setting - on y-axis.
+The original position is indicated with a dot.
+
+\item Variable contribution
+
+The intercept is the average evaluation of all examples. Going down the chart
+adds more features to a "filter" that alternatives for which the average model
+evaluation is computed must pass. The changes in these averages represent how
+making the alternative's description more specific leads to the output the model
+produces when the alternative is fed to it.
+
+\end{itemize}
+
 \end{document}

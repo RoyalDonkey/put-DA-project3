@@ -115,8 +115,8 @@ with SciKit-Learn's \verb`train_test_split()` function, by fixing its random
 seed. \verb`train_test_split()` also takes care of the stratification of the
 resulting sets.
 
-\subsection{The "3-alternative analyses"}
-For all models' "3-alternative analyses" we used the same 3 alternatives
+\subsection{The "3-alternative" analyses}
+For all models' "3-alternative" analyses we used the same 3 alternatives
 (again, to retain fairness of comparison):
 
 \begin{longtable}[c]{|r|n|n|n|n|n|n|l|}
@@ -128,9 +128,9 @@ For all models' "3-alternative analyses" we used the same 3 alternatives
 	\emph{\#} & \emph{buying} & \emph{maint} & \emph{doors} & \emph{persons} & \emph{lug\_boot} & \emph{safety} & \emph{class} \\
 	\hline
 	\endhead
-	1    & 1.000000 & 1.000000 & 0.000000 & 0.000000 & 0.000000 & 0.000000 & 1.000000 \\
-	1636 & 0.000000 & 0.000000 & 0.000000 & 0.500000 & 1.000000 & 0.000000 & 1.000000 \\
-	1728 & 0.000000 & 0.000000 & 1.000000 & 1.000000 & 1.000000 & 1.000000 & 4.000000 \\
+	1 & 1.000000 & 1.000000 & 0.000000 & 0.000000 & 0.000000 & 0.000000 & 1.000000 \\
+	2 & 0.000000 & 0.000000 & 0.000000 & 0.500000 & 1.000000 & 0.000000 & 1.000000 \\
+	3 & 0.000000 & 0.000000 & 1.000000 & 1.000000 & 1.000000 & 1.000000 & 4.000000 \\
 	\hline
 	\caption{Alternatives chosen for all 3-alternative analyses}
 \end{longtable}
@@ -140,8 +140,8 @@ best case, and the second one lies somewhere in the middle.
 \subsection{Extras}
 Throughout the making of this report, we've accumulated some plots that we did
 not think would contribute much in terms of quality, and would take up many
-extra pages. Most notably this happened with the partial dependence plots of
-the 3-alternative analyses.
+extra pages. Most notably this happened with the ceteris paribus plots of the
+3-alternative analyses.
 
 In such cases, we either completely or partially omit a plot from the report.
 If you are interested in those omitted parts, take a look at the
